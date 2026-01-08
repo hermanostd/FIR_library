@@ -4,13 +4,13 @@
 
 namespace oh::fir{
 
-class Highpass : public FIR {
+class WindowLowpass : public FIR {            
 
     private:
 
     double m_fc;
 
-    Highpass(double fc, size_t size);
+    WindowLowpass(double fc, size_t size);
 
     protected:
 
@@ -18,7 +18,7 @@ class Highpass : public FIR {
 
     public:
 
-    static std::expected <Highpass, FIRError> create(double fc, size_t size);                 
+    static std::expected <WindowLowpass, FIRError> create(double fc, size_t size);
 
 };
 

@@ -12,9 +12,10 @@ namespace oh::fir {
 
 /// @brief enum used to represent filter type
 enum class FIRType {        
-    Lowpass,
-    Highpass,
-    Bandpass
+    WindowLowpass,
+    WindowHighpass,
+    WindowBandpass,
+    FrequencySampling
 };
 
 /// @brief enum used for error handling
@@ -26,6 +27,18 @@ enum class FIRError {
     NormalisationFailed
 };
 
+///<    debugging and error handling
+
+/// @brief used to translate FIRError to std::string
+/// @param fir_error 
+/// @return string
+std::string toString(oh::fir::FIRError fir_error);
+
+/// @brief used to translate FIRType to std::string
+/// @param fir_type 
+/// @return string
+std::string toString(oh::fir::FIRType fir_type);
+
 
 
 /// @brief a class used as a template to implement more specific FIR filters
@@ -33,11 +46,11 @@ class FIR {
     
     private:
 
-    /// @brief stores the type
+    /// @brief stores the type of filter
     FIRType m_type;
 
 
-    /// @brief stores the coefficients
+    /// @brief stores the coefficients of the filter
     std::vector <double> m_coefficients;
 
     protected:
@@ -69,7 +82,7 @@ class FIR {
 
     ///<    constructor
 
-    /// @brief protected consturctor
+    /// @brief protected consturctor, validation must be handled by create()
     /// @param type type of filter FIRType
     /// @param size size of filter
     FIR(FIRType type, size_t size);      
@@ -111,24 +124,12 @@ class FIR {
     /// @brief calulates the convolution of signal with the filter
     /// @param signal input signal
     /// @return vector containing convluted signal(copy)
-    std::expected <std::vector<double>, FIRError> convolution(const std::vector<double>& signal) const;
+    std::expected <std::vector<double>, FIRError> convolve(const std::vector<double>& signal) const;
 
     /// @brief calulates the convolution of signal with the filter
     /// @param signal input signal
     /// @return vector containing convluted signal(overriden)
-    std::expected <std::vector<double>, FIRError> convolutionOverride(std::vector<double>& signal) const;
-
-    ///<    debugging and error handling
-
-    /// @brief used to translate FIRError to std::string
-    /// @param fir_error 
-    /// @return string
-    std::string FIR::FIRErrorToString(oh::fir::FIRError fir_error) const;
-
-    /// @brief used to translate FIRType to std::string
-    /// @param fir_type 
-    /// @return string
-    std::string FIR::FIRTypeToString(oh::fir::FIRType fir_type) const;
+    std::expected <std::vector<double>, FIRError> convolveInPlace(std::vector<double>& signal) const;
 
     /// @brief destructor
     virtual ~FIR() = default;

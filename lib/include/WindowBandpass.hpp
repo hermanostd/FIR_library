@@ -4,14 +4,14 @@
 
 namespace oh::fir {
 
-class Bandpass : public FIR {
+class WindowBandpass : public FIR {
 
     private:
 
     double m_fc_low;
     double m_fc_high;
 
-    Bandpass(double fc_low, double fc_high, size_t size);
+    WindowBandpass(double fc_low, double fc_high, size_t size);
 
     protected:
 
@@ -19,7 +19,7 @@ class Bandpass : public FIR {
 
     public:
 
-    static std::expected <Bandpass, FIRError> create(double fc_low, double fc_high, size_t size);
+    static std::expected <WindowBandpass, FIRError> create(double fc_low, double fc_high, size_t size);
 
 };
 

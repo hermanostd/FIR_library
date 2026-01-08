@@ -1,31 +1,32 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(EasyDSP
-    VERSION 0.1.0
+project(easydsp
+    VERSION 0.1.1
     LANGUAGES CXX
 )
 
 # -----------------------------
 # Library target
 # -----------------------------
-add_library(EasyDSP)
+add_library(easydsp)
 
 # C++ standard
 target_compile_features(easydsp PUBLIC cxx_std_23)
 
 # Include directories
-target_include_directories(EasyDSP
+target_include_directories(easydsp
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 # Source files
-target_sources(EasyDSP
+target_sources(easydsp
     PRIVATE
         src/FIR.cpp
-        src/Lowpass.cpp
-        src/Highpass.cpp
-        src/Bandpass.cpp
+        src/WindowLowpass.cpp
+        src/WindowHighpass.cpp
+        src/WindowBandpass.cpp
+        src/FrequencySampling.cpp
 )
 
 # Warnings (recommended)

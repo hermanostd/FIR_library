@@ -2,6 +2,36 @@
 
 namespace oh::fir{
 
+std::string toString(oh::fir::FIRError fir_error){
+    switch (fir_error) {
+        case oh::fir::FIRError::InvalidParameterValue:
+            return "InvalidParameterValue";
+        case oh::fir::FIRError::InvalidParameterOrder:
+            return "InvalidParameterOrder";
+        case oh::fir::FIRError::InvalidSize:
+            return "InvalidSize";
+        case oh::fir::FIRError::MismatchedSize:
+            return "MismatchedSize";
+        default:
+            return "Unknown";
+    }
+}
+
+std::string toString(FIRType fir_type){
+    switch (fir_type) {
+        case FIRType::WindowLowpass:
+            return "WindowLowpass";
+        case FIRType::WindowBandpass:
+            return "WindowBandpass";
+        case FIRType::WindowHighpass:
+            return "WindowHighpass";
+        case FIRType::FrequencySampling:
+            return "FrequencySampling";
+        default:
+            return "Undefined";
+    }
+}
+
 FIR::FIR(FIRType type, size_t size)  : m_type(type), m_coefficients(size , 0.0) {} 
 
 std::expected <void, FIRError> FIR::checkFrequencyRange(double fc) {           
@@ -21,7 +51,7 @@ std::expected <void, FIRError> FIR::checkFrequencyOrder(double fc_low, double fc
 }
 
 std::expected <void, FIRError> FIR::checkSize(size_t size) {          
-    if(size == 0 || size % 2 == 0) {
+    if(size < 3 || size % 2 == 0) {
         return std::unexpected(FIRError::InvalidSize);
     } else {
         return {};
@@ -78,7 +108,7 @@ FIRType FIR::getType() const noexcept {
 }
 
 
-std::expected <std::vector<double>, FIRError> FIR::convolution(const std::vector<double>& signal) const {        
+std::expected <std::vector<double>, FIRError> FIR::convolve(const std::vector<double>& signal) const {        
     const size_t N = signal.size();
     const size_t M = m_coefficients.size();
 
@@ -97,40 +127,12 @@ std::expected <std::vector<double>, FIRError> FIR::convolution(const std::vector
         return w;
 }
 
-std::expected <std::vector<double>, FIRError> FIR::convolutionOverride(std::vector<double>& signal) const {        
-    if (auto w = convolution(signal); !w) {
+std::expected <std::vector<double>, FIRError> FIR::convolveInPlace(std::vector<double>& signal) const {        
+    if (auto w = convolve(signal); !w) {
         return std::unexpected(w.error());
     } else {
         signal = *w;
         return signal;
-    }
-}
-
-std::string FIR::FIRErrorToString(oh::fir::FIRError fir_error) const {
-    switch (fir_error) {
-        case oh::fir::FIRError::InvalidParameterValue:
-            return "InvalidParameterValue";
-        case oh::fir::FIRError::InvalidParameterOrder:
-            return "InvalidParameterOrder";
-        case oh::fir::FIRError::InvalidSize:
-            return "InvalidSize";
-        case oh::fir::FIRError::MismatchedSize:
-            return "MismatchedSize";
-        default:
-            return "Unknown";
-    }
-}
-
-std::string FIR::FIRTypeToString(oh::fir::FIRType fir_type) const {
-    switch (fir_type) {
-        case oh::fir::FIRType::Lowpass:
-            return "Lowpass";
-        case oh::fir::FIRType::Bandpass:
-            return "Bandpass";
-        case oh::fir::FIRType::Highpass:
-            return "Highpass";
-        default:
-            return "Undefined";
     }
 }
 

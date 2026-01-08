@@ -1,10 +1,10 @@
-#include "Bandpass.hpp"
+#include "WindowBandpass.hpp"
 
 namespace oh::fir{
 
-Bandpass::Bandpass(double fc_low, double fc_high, size_t size) : FIR(FIRType::Bandpass, size), m_fc_low(fc_low), m_fc_high(fc_high) {}
+WindowBandpass::WindowBandpass(double fc_low, double fc_high, size_t size) : FIR(FIRType::WindowBandpass, size), m_fc_low(fc_low), m_fc_high(fc_high) {}
 
-std::expected <void, FIRError> Bandpass::calculateCoefficients() {            
+std::expected <void, FIRError> WindowBandpass::calculateCoefficients() {            
     const size_t N = getSize();
     const double fl = m_fc_low;
     const double fh = m_fc_high;
@@ -25,7 +25,7 @@ std::expected <void, FIRError> Bandpass::calculateCoefficients() {
 
 }
 
-std::expected <Bandpass, FIRError> Bandpass::create(double fc_low, double fc_high, size_t size) {         
+std::expected <WindowBandpass, FIRError> WindowBandpass::create(double fc_low, double fc_high, size_t size) {         
     if(auto w = checkSize(size); !w) {          
         return std::unexpected(w.error());
     }
@@ -40,7 +40,7 @@ std::expected <Bandpass, FIRError> Bandpass::create(double fc_low, double fc_hig
         return std::unexpected(w.error());
     }
 
-    Bandpass bp(fc_low, fc_high, size);
+    WindowBandpass bp(fc_low, fc_high, size);
 
     if(auto w = bp.calculateCoefficients(); !w) {
         return std::unexpected(w.error());

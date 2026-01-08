@@ -1,10 +1,10 @@
-#include "Lowpass.hpp"
+#include "WindowLowpass.hpp"
 
 namespace oh::fir {
 
-Lowpass::Lowpass(double fc, size_t size) : FIR(FIRType::Lowpass, size), m_fc(fc) {}
+WindowLowpass::WindowLowpass(double fc, size_t size) : FIR(FIRType::WindowLowpass, size), m_fc(fc) {}
 
-std::expected <void, FIRError> Lowpass::calculateCoefficients() {            
+std::expected <void, FIRError> WindowLowpass::calculateCoefficients() {            
     const size_t N = getSize();
     const double fc = m_fc;
     const double M = (N - 1) / 2.0f;
@@ -25,7 +25,7 @@ std::expected <void, FIRError> Lowpass::calculateCoefficients() {
 }
 
 
-std::expected <Lowpass, FIRError> Lowpass::create(double fc, size_t size) {          
+std::expected <WindowLowpass, FIRError> WindowLowpass::create(double fc, size_t size) {          
     if(auto w = checkSize(size); !w) {          
         return std::unexpected(w.error());
     }
@@ -34,7 +34,7 @@ std::expected <Lowpass, FIRError> Lowpass::create(double fc, size_t size) {
         return std::unexpected(w.error());
     }
 
-    Lowpass lp(fc, size);
+    WindowLowpass lp(fc, size);
 
     if(auto w = lp.calculateCoefficients(); !w) {
         return std::unexpected(w.error());
