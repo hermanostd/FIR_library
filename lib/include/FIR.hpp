@@ -11,8 +11,7 @@ namespace oh::fir {
 enum class FIRType {        
     Lowpass,
     Highpass,
-    Bandpass,
-    Custom 
+    Bandpass
 };
 
 enum class FIRError {       

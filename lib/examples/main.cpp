@@ -2,6 +2,7 @@
 #include "Lowpass.hpp"
 #include "Bandpass.hpp"
 #include "Highpass.hpp"
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -31,8 +32,6 @@ std::string FIRType_to_string(oh::fir::FIRType fir_type) {
             return "Bandpass";
         case oh::fir::FIRType::Highpass:
             return "Highpass";
-        case oh::fir::FIRType::Custom:
-            return "Custom";
         default:
             return "Undefined";
     }
