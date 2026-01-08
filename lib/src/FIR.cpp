@@ -1,5 +1,3 @@
-#pragma once
-
 #include "FIR.hpp"
 
 namespace oh::fir{
@@ -71,11 +69,11 @@ const std::vector <double> & FIR::getCoefficients() const {
         return m_coefficients;
 }
 
-const size_t FIR::getSize() const noexcept {            
+size_t FIR::getSize() const noexcept {            
     return m_coefficients.size();
 }
 
-const FIRType FIR::getType() const noexcept {          
+FIRType FIR::getType() const noexcept {          
     return m_type;
 }
 

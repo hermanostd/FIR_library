@@ -1,10 +1,9 @@
 #pragma once
 
-#include "FIR.hpp"
-
 #include <cmath>
 #include <vector>
 #include <numbers>
+#include <cstddef>
 #include <expected>
 
 namespace oh::fir {
@@ -34,36 +33,33 @@ class FIR {
 
     protected:
 
-    static std::expected <void, FIRError> checkFrequencyRange(double fc) {}           
+    static std::expected <void, FIRError> checkFrequencyRange(double fc);          
 
-    static std::expected <void, FIRError> checkFrequencyOrder(double fc_low, double fc_high) {}            
+    static std::expected <void, FIRError> checkFrequencyOrder(double fc_low, double fc_high);            
 
+    static std::expected <void, FIRError> checkSize(size_t size);          
 
-    static std::expected <void, FIRError> checkSize(size_t size) {}          
+    static double sinc(double x);         
 
+    FIR(FIRType type, size_t size);      
 
-    static double sinc(double x) {}          
+    std::expected <void, FIRError> setCoefficients(const std::vector <double>& coefficients);
 
-    FIR(FIRType type, size_t size) {}       
-
-    std::expected <void, FIRError> setCoefficients(const std::vector <double>& coefficients) {}
-
-    std::expected <void, FIRError> normaliseCoefficients() {}
+    std::expected <void, FIRError> normaliseCoefficients();
 
     virtual std::expected <void, FIRError> calculateCoefficients()  = 0;
 
     public:
 
-    const std::vector <double> & getCoefficients() const {}
+    const std::vector <double> & getCoefficients() const;
 
-    const size_t getSize() const noexcept {}
+    size_t getSize() const noexcept;
 
-    const FIRType getType() const noexcept {}
+    FIRType getType() const noexcept;
 
+    std::expected <std::vector<double>, FIRError> convolution(const std::vector<double>& signal) const;
 
-    std::expected <std::vector<double>, FIRError> convolution(const std::vector<double>& signal) const {}
-
-    std::expected <std::vector<double>, FIRError> convolutionOverride(std::vector<double>& signal) const {}
+    std::expected <std::vector<double>, FIRError> convolutionOverride(std::vector<double>& signal) const;
 
     virtual ~FIR() = default;
 
