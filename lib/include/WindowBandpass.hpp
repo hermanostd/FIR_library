@@ -13,6 +13,8 @@ class WindowBandpass : public FIR {
 
     WindowBandpass(double fc_low, double fc_high, size_t size);
 
+    WindowBandpass(double fc_low, double fc_high, wnd::WindowType w_type);
+
     protected:
 
     std::expected <void, FIRError> calculateCoefficients() override;

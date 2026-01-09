@@ -11,6 +11,8 @@ class FrequencySampling : public FIR{
 
     FrequencySampling(const std::vector <double>& half_frequency_spectrum, size_t size);
 
+    FrequencySampling(const std::vector <double>& half_frequency_spectrum, size_t size, wnd::WindowType w_type);
+
     protected:
 
     std::expected <void, FIRError> calculateCoefficients() override;

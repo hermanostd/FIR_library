@@ -12,6 +12,8 @@ class WindowLowpass : public FIR {
 
     WindowLowpass(double fc, size_t size);
 
+    WindowLowpass(double fc, size_t size, wnd::WindowType w_type);
+
     protected:
 
     std::expected <void, FIRError> calculateCoefficients() override;

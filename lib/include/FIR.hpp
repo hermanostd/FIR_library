@@ -1,11 +1,14 @@
 #pragma once
 
+#include "Window.hpp"
+
 #include <cmath>
 #include <vector>
 #include <numbers>
 #include <cstddef>
 #include <expected>
 #include <string>
+
 
 
 namespace oh::fir {
@@ -49,6 +52,9 @@ class FIR {
     /// @brief stores the type of filter
     FIRType m_type;
 
+    /// @brief stores the type of window
+    wnd::WindowType m_window_type;
+
 
     /// @brief stores the coefficients of the filter
     std::vector <double> m_coefficients;
@@ -80,12 +86,18 @@ class FIR {
     /// @return value of sin(pi*x)/(pi*x)
     static double sinc(double x);
 
-    ///<    constructor
+    ///<    constructors
 
     /// @brief protected consturctor, validation must be handled by create()
     /// @param type type of filter FIRType
     /// @param size size of filter
-    FIR(FIRType type, size_t size);      
+    FIR(FIRType type, size_t size);
+
+    /// @brief protected constructor, used to add a window
+    /// @param fir_type type of filter FIRType
+    /// @param size size of filter
+    /// @param win_typeS type of window WindowType
+    FIR(FIRType fir_type, size_t size, wnd::WindowType win_type);
 
 
     /// @brief protected setter for coefficients
