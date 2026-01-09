@@ -72,30 +72,33 @@ int main() {
     std::cout << "----getCoefficients----" << std::endl;
     std::cout << std::endl;
 
-    std::cout << "WindowLowpass: " << std::endl;
+    std::cout << "1: " << std::endl;
     for(auto w : lp -> getCoefficients()) {
-        std::cout << w << std::endl;
+        std::cout << w << " ";
     }
 
     std::cout << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "WindowBandpass: " << std::endl;
+    std::cout << "2: " << std::endl;
     for(auto w : bp -> getCoefficients()) {
-        std::cout << w << std::endl;
+        std::cout << w << " ";
     }
 
     std::cout << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "WindowHighpass: " << std::endl;
+    std::cout << "3: " << std::endl;
     for(auto w : hp -> getCoefficients()) {
-        std::cout << w << std::endl;
+        std::cout << w << " ";
     }
 
     std::cout << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "FrequencySampling " << std::endl;
+    std::cout << "4: " << std::endl;
     for(auto w : fs -> getCoefficients()) {
-        std::cout << w << std::endl;
+        std::cout << w << " ";
     }
     
 }
