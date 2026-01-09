@@ -1,7 +1,7 @@
 # EasyDSP
 This is a c++ library for fir filters and windows.
 
-#features:
+FEATURES:
 -No exceptions, errors handled by std::expected
 -Non mutable FIR filters
 -Mutable windows
