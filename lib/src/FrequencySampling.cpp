@@ -2,19 +2,20 @@
 
 namespace oh::fir {
 
-FrequencySampling::FrequencySampling(size_t size) : FIR(FIRType::FrequencySampling, size) {}
+FrequencySampling::FrequencySampling(const std::vector<double>& half_frequency_spectrum, size_t size) : FIR(FIRType::FrequencySampling, size), m_half_frequency_spectrum(half_frequency_spectrum) {}
 
 std::expected <void, FIRError> FrequencySampling::calculateCoefficients() {
-    const size_t N = m_half_frequency_spectrum.size();
-    const size_t M = 2 * N + 1;
+    const size_t K = m_half_frequency_spectrum.size();
+    const size_t N = 2 * K + 1;
+    const double center = (N - 1) / 2.0;
 
     std::vector<double> h(N, 0.0);
 
     for (size_t n = 0; n < N; ++n) {
         double sum = m_half_frequency_spectrum[0];
 
-        for (size_t k = 1; k < N; ++k) {
-            sum += 2.0 * m_half_frequency_spectrum[k] * std::cos(2.0 * std::numbers::pi * k * (n - M) / N);
+        for (size_t k = 1; k < K; ++k) {
+            sum += 2.0 * m_half_frequency_spectrum[k] * std::cos(2.0 * std::numbers::pi * k * (n - center) / N);
         }
 
         h[n] = sum / N;
@@ -35,7 +36,7 @@ std::expected <FrequencySampling, FIRError> FrequencySampling::create(const std:
         return std::unexpected(w.error());
     }
   
-    FrequencySampling fs(size);
+    FrequencySampling fs(half_frequency_spectrum, size);
 
     if(auto w = fs.calculateCoefficients(); !w) {
         return std::unexpected(w.error());

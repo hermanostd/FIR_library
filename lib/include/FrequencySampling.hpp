@@ -9,7 +9,7 @@ class FrequencySampling : public FIR{
 
     std::vector <double> m_half_frequency_spectrum;     
 
-    FrequencySampling(size_t size);
+    FrequencySampling(const std::vector <double>& half_frequency_spectrum, size_t size);
 
     protected:
 
