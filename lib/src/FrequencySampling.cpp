@@ -2,7 +2,11 @@
 
 namespace oh::fir {
 
-FrequencySampling::FrequencySampling(const std::vector<double>& half_frequency_spectrum, size_t size) : FIR(FIRType::FrequencySampling, size), m_half_frequency_spectrum(half_frequency_spectrum) {}
+FrequencySampling::FrequencySampling(const std::vector<double>& half_frequency_spectrum, size_t size) 
+: FIR(FIRType::FrequencySampling, size), m_half_frequency_spectrum(half_frequency_spectrum) {}
+
+FrequencySampling::FrequencySampling(const std::vector<double>& half_frequency_spectrum, size_t size, wnd::WindowType w_type) 
+: FIR(FIRType::FrequencySampling, size, w_type), m_half_frequency_spectrum(half_frequency_spectrum) {}
 
 std::expected <void, FIRError> FrequencySampling::calculateCoefficients() {
     const size_t K = m_half_frequency_spectrum.size();
@@ -19,6 +23,16 @@ std::expected <void, FIRError> FrequencySampling::calculateCoefficients() {
         }
 
         h[n] = sum / N;
+    }
+
+    auto win = wnd::Window::create(getWindowType(), N);
+
+    if (!win) {
+        return std::unexpected(FIRError::WindowError);
+    }
+
+    if(win -> applyInPlace(h); !win) {
+        return std::unexpected(FIRError::WindowError);
     }
     
     if(auto w = setCoefficients(h); !w) {

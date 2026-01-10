@@ -11,14 +11,14 @@ std::expected <void, WindowError> Window::calculateCoefficients() {
     std::vector <double> coefficients(N, 1.0);
 
     switch (m_type) {
-        case WindowType::Rectangular:
+        case WindowType::Rectangular: {
             if(auto w = setCoefficients(coefficients); !w) {
                 return std::unexpected(w.error());
             } else {
                 return {};
             }
-
-        case WindowType::Hamming:
+        }
+        case WindowType::Hamming: {
             const double a = 0.54;
             const double b = 0.46;
             for (size_t n = 0; n < N; n++) {
@@ -29,8 +29,8 @@ std::expected <void, WindowError> Window::calculateCoefficients() {
             } else {
                 return {};
             }
-
-        case WindowType::Hanning:
+        }
+        case WindowType::Hanning: {
             for (size_t n = 0; n < N; n++) {
                 coefficients[n] = 0.5 * (1.0 - std::cos(2.0 * std::numbers::pi * n / (N - 1)));
             }
@@ -39,8 +39,8 @@ std::expected <void, WindowError> Window::calculateCoefficients() {
             } else {
                 return {};
             }
-
-        case WindowType::Blackman:
+        }
+        case WindowType::Blackman: {
             const double a = 0.42;
             const double b = 0.50;
             const double c = 0.08;
@@ -54,11 +54,12 @@ std::expected <void, WindowError> Window::calculateCoefficients() {
             } else {
                 return {};
             }
-
-        default:
+        }
+        default: {
             return std::unexpected(WindowError::InvalidType);
+        }
     }
-};
+}
 
 std::expected <void, WindowError> Window::setCoefficients(const std::vector <double>& coefficients) {
     if(coefficients.size() == m_coefficients.size()) {
@@ -79,7 +80,8 @@ std::expected <void, WindowError> Window::checkSize(size_t size) {
 
 const std::vector <double>& Window::getCoefficients() const {
     return m_coefficients;
-};
+}
+
 
 std::expected <void, WindowError> Window::setWindowType(WindowType type) {
     m_type = type;

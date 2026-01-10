@@ -20,7 +20,9 @@ class WindowHighpass : public FIR {
 
     public:
 
-    static std::expected <WindowHighpass, FIRError> create(double fc, size_t size);                 
+    static std::expected <WindowHighpass, FIRError> create(double fc, size_t size);
+    
+    static std::expected <WindowHighpass, FIRError> create(double fc, size_t size, wnd::WindowType w_type);
 
 };
 

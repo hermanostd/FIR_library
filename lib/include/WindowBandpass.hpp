@@ -13,7 +13,7 @@ class WindowBandpass : public FIR {
 
     WindowBandpass(double fc_low, double fc_high, size_t size);
 
-    WindowBandpass(double fc_low, double fc_high, wnd::WindowType w_type);
+    WindowBandpass(double fc_low, double fc_high, size_t size, wnd::WindowType w_type);
 
     protected:
 
@@ -22,6 +22,8 @@ class WindowBandpass : public FIR {
     public:
 
     static std::expected <WindowBandpass, FIRError> create(double fc_low, double fc_high, size_t size);
+
+    static std::expected <WindowBandpass, FIRError> create(double fc_low, double fc_high, size_t size, wnd::WindowType w_type);
 
 };
 

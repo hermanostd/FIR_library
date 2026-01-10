@@ -2,7 +2,11 @@
 
 namespace oh::fir {
 
-WindowHighpass::WindowHighpass(double fc, size_t size) : FIR(FIRType::WindowHighpass, size), m_fc(fc) {}
+WindowHighpass::WindowHighpass(double fc, size_t size)
+ : FIR(FIRType::WindowHighpass, size), m_fc(fc) {}
+
+WindowHighpass::WindowHighpass(double fc, size_t size, wnd::WindowType w_type)
+ : FIR(FIRType::WindowHighpass, size, w_type), m_fc(fc) {}
 
 std::expected <void, FIRError> WindowHighpass::calculateCoefficients()  {            ///< calculator of coefficients
     const size_t N = getSize();
@@ -18,6 +22,16 @@ std::expected <void, FIRError> WindowHighpass::calculateCoefficients()  {       
         if (n == static_cast <size_t> (M)) {        ///< cast double to size_t
             h[n] += 1.0;
         }
+    }
+
+    auto win = wnd::Window::create(getWindowType(), N);
+
+    if (!win) {
+        return std::unexpected(FIRError::WindowError);
+    }
+
+    if(win -> applyInPlace(h); !win) {
+        return std::unexpected(FIRError::WindowError);
     }
 
     if(auto w = setCoefficients(h); !w) {
@@ -46,6 +60,27 @@ std::expected <WindowHighpass, FIRError> WindowHighpass::create(double fc, size_
     }
 
 }
+
+std::expected <WindowHighpass, FIRError> WindowHighpass::create(double fc, size_t size, wnd::WindowType w_type) {         ///< initialiser, used to hide the constructor         
+    if(auto w = checkSize(size); !w) {          ///< check size
+        return std::unexpected(w.error());
+    }
+
+    if (auto w = checkFrequencyRange(fc); !w) {      ///< check frequency
+        return std::unexpected(w.error());
+    }
+
+    WindowHighpass hp(fc, size, w_type);
+
+    if(auto w = hp.calculateCoefficients(); !w) {
+        return std::unexpected(w.error());
+    } else {
+        return hp;
+    }
+
+}
+
+
 
 
 }

@@ -11,7 +11,7 @@ int main() {
 
     /// creating a window lowpass
 
-    auto lp = oh::fir::WindowLowpass::create(0.25, 9);
+    auto lp = oh::fir::WindowLowpass::create(0.25, 9, oh::wnd::Hamming);
     if(!lp) {
         std::cout << toString(lp.error());
     } else {
@@ -20,7 +20,7 @@ int main() {
 
     /// creating a window bandpass
 
-    auto bp = oh::fir::WindowBandpass::create(0.1, 0.4, 9);
+    auto bp = oh::fir::WindowBandpass::create(0.1, 0.4, 9, oh::wnd::Hamming);
     if(!bp) {
         std::cout << toString(lp.error());
     } else {
@@ -29,7 +29,7 @@ int main() {
 
     /// creating a window highpass
 
-    auto hp = oh::fir::WindowHighpass::create(0.25, 9);
+    auto hp = oh::fir::WindowHighpass::create(0.25, 9, oh::wnd::Hamming);
     if(!hp) {
         std::cout << toString(lp.error());
     } else {

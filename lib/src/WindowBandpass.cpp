@@ -2,7 +2,11 @@
 
 namespace oh::fir{
 
-WindowBandpass::WindowBandpass(double fc_low, double fc_high, size_t size) : FIR(FIRType::WindowBandpass, size), m_fc_low(fc_low), m_fc_high(fc_high) {}
+WindowBandpass::WindowBandpass(double fc_low, double fc_high, size_t size) : 
+FIR(FIRType::WindowBandpass, size), m_fc_low(fc_low), m_fc_high(fc_high) {}
+
+WindowBandpass::WindowBandpass(double fc_low, double fc_high, size_t size, wnd::WindowType w_type) : 
+FIR(FIRType::WindowBandpass, size, w_type), m_fc_low(fc_low), m_fc_high(fc_high) {}
 
 std::expected <void, FIRError> WindowBandpass::calculateCoefficients() {            
     const size_t N = getSize();
@@ -15,6 +19,16 @@ std::expected <void, FIRError> WindowBandpass::calculateCoefficients() {
     for (size_t n = 0; n < N; ++n) {
         double x = n - M;
         h[n] = 2.0 * fh * sinc(2.0 * fh * x)- 2.0 * fl * sinc(2.0 * fl * x);
+    }
+
+    auto win = wnd::Window::create(getWindowType(), N);
+
+    if (!win) {
+        return std::unexpected(FIRError::WindowError);
+    }
+
+    if(win -> applyInPlace(h); !win) {
+        return std::unexpected(FIRError::WindowError);
     }
 
     if(auto w = setCoefficients(h); !w) {
@@ -41,6 +55,31 @@ std::expected <WindowBandpass, FIRError> WindowBandpass::create(double fc_low, d
     }
 
     WindowBandpass bp(fc_low, fc_high, size);
+
+    if(auto w = bp.calculateCoefficients(); !w) {
+        return std::unexpected(w.error());
+    } else {
+        return bp;
+    }
+
+}
+
+std::expected <WindowBandpass, FIRError> WindowBandpass::create(double fc_low, double fc_high, size_t size, wnd::WindowType w_type) {         
+    if(auto w = checkSize(size); !w) {          
+        return std::unexpected(w.error());
+    }
+
+    if (auto w = checkFrequencyRange(fc_low); !w) {          
+        return std::unexpected(w.error());
+    } else if (auto w = checkFrequencyRange(fc_high); !w) {
+        return std::unexpected(w.error());
+    }
+
+    if (auto w = checkFrequencyOrder(fc_low, fc_high); !w) {          
+        return std::unexpected(w.error());
+    }
+
+    WindowBandpass bp(fc_low, fc_high, size, w_type);
 
     if(auto w = bp.calculateCoefficients(); !w) {
         return std::unexpected(w.error());

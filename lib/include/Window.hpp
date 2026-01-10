@@ -1,6 +1,10 @@
 #pragma once
 
-#include "FIR.hpp"
+#include <vector>
+#include <numbers>
+#include <expected>
+#include <cmath>
+#include <cstddef>
 
 ///<    work in progress, mutable window class
 
