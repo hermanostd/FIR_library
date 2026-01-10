@@ -1,15 +1,21 @@
-cmake_minimum_required(VERSION 3.23)    #specify required version for cmake
+#thanks YT:@PunchedTape for CMake tutorial :D
 
-project(easydsp VERSION 0.8 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.25)    #specify required version for cmake
+
+#project name
+project(easydsp)
 
 # Library target
-add_library(easydsp)
+add_library(${PROJECT_NAME})
 
-# C++ standard
-target_compile_features(easydsp PUBLIC cxx_std_23)
+#set required cxx standard
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 23)
+# set(CMAKE_CXX_STANDARD 23) smh this doesn't work??
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 # Include directories
-target_include_directories(easydsp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(easydsp
+     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files
 target_sources(easydsp PRIVATE
