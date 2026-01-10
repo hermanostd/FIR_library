@@ -22,6 +22,8 @@ class WindowLowpass : public FIR {
 
     static std::expected <WindowLowpass, FIRError> create(double fc, size_t size);
 
+    static std::expected <WindowLowpass, FIRError> create(double fc, size_t size, wnd::WindowType w_type);
+
 };
 
 }

@@ -118,6 +118,33 @@ std::expected <Window, WindowError> Window::create(WindowType w_type, size_t siz
     return win;
 }
 
+std::expected <std::vector <double>, WindowError> Window::apply(const std::vector <double>& signal) const{
+    const size_t signal_size = signal.size();
+    if (signal_size == m_coefficients.size()) {
+        std::vector <double> v(signal.size());
+        for(size_t n = 0; n < signal_size; ++n) {
+            v[n] = signal[n] * m_coefficients[n]; 
+        }
+        return v;
+    } else {
+        return std::unexpected(WindowError::MismatchedSize);
+    }
+}
+
+std::expected <std::vector <double>, WindowError> Window::applyInPlace(std::vector <double>& signal) const{
+    const size_t signal_size = signal.size();
+    size_t iterator = 0;
+    if (signal_size == m_coefficients.size()) {
+        for(auto &w : signal) {
+            w *= m_coefficients[iterator];
+            iterator++;
+        }
+        return signal;
+    } else {
+        return std::unexpected(WindowError::MismatchedSize);
+    }
+}
+
 }
 
 
