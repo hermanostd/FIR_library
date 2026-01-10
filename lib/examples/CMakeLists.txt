@@ -1,9 +1,8 @@
-add_executable(main
-    main.cpp
-)
+#add executable file
+add_executable(main main.cpp)
 
-target_link_libraries(main
-    PRIVATE easydsp
-)
+#link libraries
+target_link_libraries(main PRIVATE easydsp)
 
+#set compiler
 target_compile_features(main PRIVATE cxx_std_23)
