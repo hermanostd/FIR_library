@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)    #specify required version for cmake
 
-project(easydsp VERSION 0.1.1 LANGUAGES CXX)
+project(easydsp VERSION 0.8 LANGUAGES CXX)
 
 # Library target
 add_library(easydsp)
