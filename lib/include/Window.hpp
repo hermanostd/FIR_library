@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "FIR.hpp"
 
 ///<    work in progress, mutable window class
 
@@ -14,7 +14,8 @@ enum WindowType {
 };
 
 enum WindowError {
-    InvalidSize
+    InvalidSize,
+    InvalidType
 };
 
 class Window {
@@ -35,14 +36,17 @@ class Window {
 
         std::expected <void, WindowError> setCoefficients();
 
+        static std::expected <void, WindowError> checkSize();
+
     public:
+
+        const std::vector <double>& getCoefficients() const;
 
         std::expected <void, WindowError> setWindowType(WindowType type);
 
-        std::expected <Window, WindowError> create();
+        static std::expected <Window, WindowError> create(size_t size);
 
-    
-
+        static std::expected <Window, WindowError> create(WindowType w_type, size_t size);
 
 };
 

@@ -7,3 +7,4 @@
 #include "WindowBandpass.hpp"
 #include "WindowHighpass.hpp"
 #include "FrequencySampling.hpp"
+#include "Window.hpp"

@@ -18,6 +18,7 @@ target_sources(easydsp PRIVATE
     src/WindowHighpass.cpp
     src/WindowBandpass.cpp
     src/FrequencySampling.cpp
+    src/Window.cpp
 )
 
 # Examples

@@ -61,7 +61,7 @@ class FIR {
 
     protected:
 
-    ///<    these methods handle validation, they can be reused in create() method in inheriting functions
+    ///<    these methods handle validation, they can be reused in create() [thats why static] method in inheriting functions
 
     /// @brief helper to check if the frequency is valid
     /// @param fc normalised cutoff frequency
