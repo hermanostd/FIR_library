@@ -5,7 +5,7 @@ FEATURES:
 
 -No exceptions, errors handled by std::expected
 
--Non mutable FIR filters
+-Non mutable FIR filters, with mutable windows
 
 -Mutable windows
 
