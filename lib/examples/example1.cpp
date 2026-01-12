@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 #include <expected>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+
 
 int main() {
     ///< example: 
@@ -14,6 +18,16 @@ int main() {
     std::cout << "-how to change a window type in a FIR filter object" << std::endl;
     std::cout << "-how to use getters in oh::fir" << std::endl;
     std::cout << std::endl;
+
+    std::srand(std::time({}));  
+
+    size_t size_of_signal = 127;
+    std::vector <double> random_signal(size_of_signal, 0.0);
+    int i = 0;
+    for (auto &v : random_signal) {
+        v = double(std::rand() % 1000 )/10000 + std::sin(i/20) + 0.5 * std::sin(i/100);
+        i++;
+    }
 
     std::vector <oh::wnd::WindowType> w_types = {oh::wnd::WindowType::Rectangular, oh::wnd::WindowType::Hanning, oh::wnd::WindowType::Hamming, oh::wnd::WindowType::Blackman};
 
@@ -75,7 +89,7 @@ int main() {
 
     /// creating a frequency sampling filter (default window: Rectangular)
 
-    std::vector <double> H = {0.5, 0.5, 1, 1};      /// desired half frequency spectrum
+    std::vector <double> H = {0.5, 0.5, 1, 2};      /// desired half frequency spectrum
 
     auto fs = oh::fir::FrequencySampling::create(H);
     if(!fs) {
@@ -205,5 +219,122 @@ int main() {
 
         std::cout << std::endl;
     }
+    std::cout << std::endl;
+
+    std::cout << "lets filter some random noise trough our filters" << std::endl;
+
+    std::cout << std::endl;
+
+    std::fstream file ("filtering.m", std::fstream::out);
+    if(file.fail()) {
+        std::cout << "can't create a file";
+        return -1;
+    }
+
+    file << "% this is a matlab script for plotting the fir filters" << std::endl;
+    file << "clc,clear,close all;" << std::endl;  
+    file << "x = [ ";
+    for (int i = 0; i < size_of_signal; ++i) {
+        file << i << ", ";
+    }
+    file << "];" << std::endl;
+
+    file << "z = [ ";
+    for (int i = 0; i < size_of_signal+second_size-1; ++i) {
+        file << i << ", ";
+    }
+    file << "];" << std::endl;
+
+    file << "y = [ ";
+    for (auto w : random_signal) {
+        file << w << ", ";
+    }
+    file << "];" << std::endl;
+
+    auto l = lp -> convolve(random_signal);
+    if(!l) {
+        std::cout << toString(l.error());
+    }
+
+    file << "lowpass = [ ";
+    for(auto w : *l) {
+        file << w << ", ";
+    }
+    file << "];" << std::endl;
+
+    auto b = bp -> convolve(random_signal);
+    if(!b) {
+        std::cout << toString(b.error());
+    }
+
+    file << "bandpass = [ ";
+    for(auto w : *b) {
+        file << w << ", ";
+    }
+    file << "];" << std::endl;
+
+    auto h = hp -> convolve(random_signal);
+    if(!h) {
+        std::cout << toString(h.error());
+    }
+
+    file << "highpass = [ ";
+    for(auto w : *h) {
+        file << w << ", ";
+    }
+    file << "];" << std::endl;
+
+    auto f = fs -> convolve(random_signal);
+    if(!f) {
+        std::cout << toString(f.error());
+    }
+
+    file << "frequency_sampling = [ ";
+    for(auto w : *f) {
+        file << w << ", ";
+    }
+    file << "];" << std::endl;
+
+
+
+
+    file << "figure(1);" << std::endl;
+    file << "plot(x, y, '-.b');" << std::endl;
+    file << "hold on;" << std::endl;
+    file << "plot(z, lowpass, '-.r');" << std::endl;
+    file << "title('Lowpass FIR');" << std::endl;
+    file << "xlabel('Array Index');" << std::endl;
+    file << "ylabel('Value');" << std::endl;
+    file << "grid on;" << std::endl;
+
+    file << "figure(2);" << std::endl;
+    file << "plot(x, y, '-.b');" << std::endl;
+    file << "hold on;" << std::endl;
+    file << "plot(z, bandpass, '-.r');" << std::endl;
+    file << "title('Bandpass FIR');" << std::endl;
+    file << "xlabel('Array Index');" << std::endl;
+    file << "ylabel('Value');" << std::endl;
+    file << "grid on;" << std::endl;
+
+    file << "figure(3);" << std::endl;
+    file << "plot(x, y, '-.b');" << std::endl;
+    file << "hold on;" << std::endl;
+    file << "plot(z, highpass, '-.r');" << std::endl;
+    file << "title('Highpass FIR');" << std::endl;
+    file << "xlabel('Array Index');" << std::endl;
+    file << "ylabel('Value');" << std::endl;
+    file << "grid on;" << std::endl;
+
+    file << "figure(4);" << std::endl;
+    file << "plot(x, y, '-.b');" << std::endl;
+    file << "hold on;" << std::endl;
+    file << "plot(z, frequency_sampling, '-.r');" << std::endl;
+    file << "title('FrequencySampling FIR');" << std::endl;
+    file << "xlabel('Array Index');" << std::endl;
+    file << "ylabel('Value');" << std::endl;
+    file << "grid on;" << std::endl;
+
+
+    std::cout << "done, check filtering.m" << std::endl;
 
 }
