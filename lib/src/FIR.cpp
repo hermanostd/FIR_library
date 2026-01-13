@@ -150,6 +150,30 @@ std::expected <std::vector<double>, FIRError> FIR::convolveInPlace(std::vector<d
     }
 }
 
+bool FIR::operator==(const FIR& other) const {
+        if(m_coefficients == other.m_coefficients) {
+            return true;
+        } else {
+            return false;
+        }
+}
+
+bool FIR::operator!=(const FIR& other) const {
+        if(*this == other) {
+            return true;
+        } else {
+            return false;
+        }
+}
+
+std::expected <std::vector <double>, FIRError> FIR::operator*(const std::vector <double>& signal) const {
+    if (auto w = convolve(signal); !w) {
+        return std::unexpected(w.error());
+    } else {
+        return *w;
+    }
+}
+
 }
 
 

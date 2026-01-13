@@ -155,6 +155,10 @@ class FIR {
     /// @brief destructor
     virtual ~FIR() = default;
 
+    bool operator==(const FIR& other) const;
+    bool operator!=(const FIR& other) const;
+    std::expected <std::vector <double>, FIRError> operator*(const std::vector <double>& signal) const;
+
 };
 
 }

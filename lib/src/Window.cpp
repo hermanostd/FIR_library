@@ -89,6 +89,10 @@ std::expected <void, WindowError> Window::calculateCoefficients() {
     }
 }
 
+const size_t Window::getSize() const noexcept{
+    return m_coefficients.size();
+}
+
 std::expected <void, WindowError> Window::setCoefficients(const std::vector <double>& coefficients) {
     if(coefficients.size() == m_coefficients.size()) {
         m_coefficients = coefficients;
@@ -174,9 +178,35 @@ std::expected <void, WindowError> Window::applyInPlace(std::vector <double>& sig
     }
 }
 
-const WindowType Window::getType() const {
+const WindowType Window::getType() const noexcept{
     return m_type;
 }
+
+bool Window::operator==(const Window& other) const {
+        if(m_type == other.m_type && getSize() == other.getSize()) {
+            return true;
+        } else {
+            return false;
+        }
+}
+
+bool Window::operator!=(const Window& other) const {
+        if(*this == other) {
+            return true;
+        } else {
+            return false;
+        }
+}
+
+std::expected <std::vector <double>, WindowError> Window::operator*(const std::vector <double>& signal) const {
+    if (auto w = apply(signal); !w) {
+        return std::unexpected(w.error());
+    } else {
+        return w;
+    }
+}
+
+
 
 }
 

@@ -51,6 +51,23 @@ int main() {
             std::cout << "succesfully created " << toString(hp -> getWindowType()) << " with window: " << toString(hp -> getWindowType()) << std::endl;
         }
 
+        std::cout << std::endl;
+        std::cout << "checking operator == ";
+        if(lp == hp) {
+            std::cout << "true";
+        } else {
+            std::cout << "false";
+        }
+        std::cout << std::endl;
+
+        std::cout << "checking operator != ";
+        if(lp != hp) {
+            std::cout << "true";
+        } else {
+            std::cout << "false";
+        }
+        std::cout << std::endl;
+
 
     }
 
@@ -250,8 +267,9 @@ int main() {
         file << w << ", ";
     }
     file << "];" << std::endl;
-
-    auto l = lp -> convolve(random_signal);
+    
+    ///checking operator *
+    auto l = (*lp) * random_signal;
     if(!l) {
         std::cout << toString(l.error());
     }
