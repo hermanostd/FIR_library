@@ -15,4 +15,4 @@ FEATURES:
 
 -Built in convolve() and convolveInPlace() functions for using the filters
 
--Built in apply() and applyInPlac() functions for using windows
+-Built in apply() and applyInPlace() functions for using windows
